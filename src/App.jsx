@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import TaskList from "./components/TaskList";
 import "./App.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
     const [tasks, setTasks] = useState(() => {
@@ -31,27 +33,30 @@ function App() {
     }, [isDarkMode]);
 
     const handleAddTask = () => {
-        if (newTask.trim() === "") return;
-        const task = {
-            id: Date.now(),
-            text: newTask.trim(),
-            isCompleted: false,
-        };
-        setTasks([...tasks, task]);
-        setNewTask("");
+    if (newTask.trim() === "") return;
+    const task = {
+        id: Date.now(),
+        text: newTask.trim(),
+        isCompleted: false,
     };
+    setTasks([...tasks, task]);
+    setNewTask("");
+    toast.success("✅ Tâche ajoutée !");
+};
 
-    const handleDeleteTask = (id) => {
-        setTasks(tasks.filter((task) => task.id !== id));
-    };
+   const handleDeleteTask = (id) => {
+    setTasks(tasks.filter((task) => task.id !== id));
+    toast.info("🗑️ Tâche supprimée !");
+};
+const handleToggleTask = (id) => {
+    setTasks(
+        tasks.map((task) =>
+            task.id === id ? { ...task, isCompleted: !task.isCompleted } : task
+        )
+    );
+    toast("🔄 Statut de la tâche mis à jour !");
+};
 
-    const handleToggleTask = (id) => {
-        setTasks(
-            tasks.map((task) =>
-                task.id === id ? { ...task, isCompleted: !task.isCompleted } : task
-            )
-        );
-    };
 
     const filteredTasks = tasks
         .filter((task) =>
@@ -130,6 +135,20 @@ function App() {
                 onDelete={handleDeleteTask}
                 onToggle={handleToggleTask}
             />
+
+            <ToastContainer
+    position="top-center"
+    autoClose={1500}
+    hideProgressBar={false}
+    newestOnTop={false}
+    closeOnClick
+    rtl={false}
+    pauseOnFocusLoss
+    draggable
+    pauseOnHover
+    theme={isDarkMode ? "dark" : "light"} // adapte au mode sombre
+/>
+
         </div>
     );
 }
