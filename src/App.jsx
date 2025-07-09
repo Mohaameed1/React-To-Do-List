@@ -10,11 +10,25 @@ function App() {
         return savedTasks ? JSON.parse(savedTasks) : [];
     });
     const [newTask, setNewTask] = useState("");
-    const [filter, setFilter] = useState("all"); // all | active | completed
+    const [searchTerm, setSearchTerm] = useState("");
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+        const savedMode = localStorage.getItem("darkMode");
+        return savedMode === "true";
+    });
+    const [filter, setFilter] = useState("all"); // 'all' | 'active' | 'completed'
 
     useEffect(() => {
         localStorage.setItem("tasks", JSON.stringify(tasks));
     }, [tasks]);
+
+    useEffect(() => {
+        localStorage.setItem("darkMode", isDarkMode);
+        if (isDarkMode) {
+            document.body.classList.add("dark-mode");
+        } else {
+            document.body.classList.remove("dark-mode");
+        }
+    }, [isDarkMode]);
 
     const handleAddTask = () => {
         if (newTask.trim() === "") return;
@@ -39,15 +53,68 @@ function App() {
         );
     };
 
-    const filteredTasks = tasks.filter((task) => {
-        if (filter === "active") return !task.isCompleted;
-        if (filter === "completed") return task.isCompleted;
-        return true;
-    });
+    const filteredTasks = tasks
+        .filter((task) =>
+            task.text.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        .filter((task) => {
+            if (filter === "active") return !task.isCompleted;
+            if (filter === "completed") return task.isCompleted;
+            return true; // all
+        });
+
+    const remainingTasks = tasks.filter((task) => !task.isCompleted).length;
 
     return (
         <div className="app-container">
-            <h1>📝 To Do List </h1>
+            <h1>📝 To Do List</h1>
+
+            {/* Toggle Dark Mode */}
+            <button
+                onClick={() => setIsDarkMode(!isDarkMode)}
+                className="toggle-button"
+            >
+                {isDarkMode ? "☀️ Mode Clair" : "🌙 Mode Sombre"}
+            </button>
+
+            <p>
+                Il reste <strong>{remainingTasks}</strong> tâche
+                {remainingTasks !== 1 ? "s" : ""} à faire
+            </p>
+
+            {/* ✅ Boutons de filtre */}
+            <div className="filter-buttons">
+                <button
+                    className={filter === "all" ? "active-filter" : ""}
+                    onClick={() => setFilter("all")}
+                >
+                    Toutes
+                </button>
+                <button
+                    className={filter === "active" ? "active-filter" : ""}
+                    onClick={() => setFilter("active")}
+                >
+                    Actives
+                </button>
+                <button
+                    className={filter === "completed" ? "active-filter" : ""}
+                    onClick={() => setFilter("completed")}
+                >
+                    Terminées
+                </button>
+            </div>
+
+            {/* Input de recherche */}
+            <div className="input-container">
+                <input
+                    type="text"
+                    placeholder="Rechercher une tâche..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
+
+            {/* Input d'ajout */}
             <div className="input-container">
                 <input
                     type="text"
@@ -56,51 +123,6 @@ function App() {
                     onChange={(e) => setNewTask(e.target.value)}
                 />
                 <button onClick={handleAddTask}>Ajouter</button>
-            </div>
-
-            {/* Boutons de filtre */}
-            <div style={{ margin: "10px 0" }}>
-                <button
-                    onClick={() => setFilter("all")}
-                    style={{
-                        marginRight: "5px",
-                        background: filter === "all" ? "#3498db" : "#ccc",
-                        color: "white",
-                        border: "none",
-                        padding: "6px 12px",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                    }}
-                >
-                    Toutes
-                </button>
-                <button
-                    onClick={() => setFilter("active")}
-                    style={{
-                        marginRight: "5px",
-                        background: filter === "active" ? "#3498db" : "#ccc",
-                        color: "white",
-                        border: "none",
-                        padding: "6px 12px",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                    }}
-                >
-                    Actives
-                </button>
-                <button
-                    onClick={() => setFilter("completed")}
-                    style={{
-                        background: filter === "completed" ? "#3498db" : "#ccc",
-                        color: "white",
-                        border: "none",
-                        padding: "6px 12px",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                    }}
-                >
-                    Terminées
-                </button>
             </div>
 
             <TaskList
