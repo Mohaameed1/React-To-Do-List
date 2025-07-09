@@ -1,69 +1,81 @@
-.App {
-  font-family: sans-serif;
-  max-width: 400px;
-  margin: 40px auto;
-  text-align: center;
-  background-color: #401010;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-input[type="text"] {
-  padding: 8px;
-  width: 70%;
-  border: 1px solid #fdf7f7;
-  border-radius: 6px;
-}
-
-button {
-  padding: 8px 12px;
-  margin-left: 8px;
-  background-color: #1976d2;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #cbd5e3;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-  margin-top: 20px;
-  text-align: left;
-}
-
-li {
-  background: rgb(156, 100, 100);
-  padding: 8px 12px;
-  margin-bottom: 8px;
-  border-radius: 6px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-li button {
-  background-color: #e53935;
-  border: none;
-  padding: 4px 8px;
-  border-radius: 4px;
-}
-
-li button:hover {
-  background-color: #b71c1c;
-}
+/* src/App.css */
 
 body {
+  font-family: "Segoe UI", sans-serif;
+  background-color: #54709b;
   margin: 0;
-  background-color: #463333;
+  padding: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   min-height: 100vh;
 }
+
+.app-container {
+  background: rgb(82, 64, 64);
+  padding: 24px;
+  margin-top: 150px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 400px;
+}
+
+h1 {
+  text-align: center;
+  color: #ebede9;
+  margin-bottom: 20px;
+}
+
+.input-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.input-container input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #dd9797;
+  font-size: 16px;
+}
+
+.input-container button {
+  background-color: #3498db;
+  color: rgb(248, 237, 237);
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s;
+}
+
+.input-container button:hover {
+  background-color: #2980b9;
+}
+
+.task-item.completed {
+  background-color: #30513f !important;
+}
+.task-item span {
+    color: #333;
+}
+
+
+.task-item.completed span {
+  text-decoration: line-through;
+  color: #d14141;
+}
+
+.task-item:hover {
+  background-color: #5b828b;
+  transition: background-color 0.2s;
+}
+
+.task-item {
+    color: #333 !important;
+    font-size: 16px;
+}
+
